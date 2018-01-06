@@ -16,7 +16,8 @@ fi
 
 # Set up Mosquitto
 mv /dock/mosquitto/01-mosquitto-local.conf /etc/mosquitto/conf.d/
-mv /dock/mosquitto/02-mosquitto-ssl.conf /etc/mosquitto/conf.d/
+#mv /dock/mosquitto/02-mosquitto-ssl.conf /etc/mosquitto/conf.d/
+mv /dock/mosquitto/mosquitto.acl /etc/mosquitto/
 
 echo "phmeter:${MOSQ_PHMETER_PASS}" > /etc/mosquitto/pwfile
 echo "user:${MOSQ_USER_PASS}" >> /etc/mosquitto/pwfile

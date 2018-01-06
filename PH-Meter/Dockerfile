@@ -12,6 +12,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install applications
 RUN apt-get update
 RUN apt-get install -y apt-transport-https 
+RUN curl -sL http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
+RUN echo "deb http://repo.mosquitto.org/debian jessie main" | tee /etc/apt/sources.list.d/mosquitto.list
 RUN curl -sL https://repos.influxdata.com/influxdb.key | apt-key add - source /etc/os-release
 RUN echo "deb https://repos.influxdata.com/debian jessie stable" | tee /etc/apt/sources.list.d/influxdb.list
 RUN apt-get update
@@ -32,7 +34,7 @@ ADD grafana/PH-Meter.json /var/lib/grafana/dashboards/
 # Clean away unnessecary packages
 RUN apt-get remove -y python3-pip apt-transport-https ; apt-get -y autoremove
 
-EXPOSE 1883 8883 3000
+EXPOSE 1883 3000
 
 VOLUME /var/lib/influxdb
 
