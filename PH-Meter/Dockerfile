@@ -32,6 +32,8 @@ ADD grafana/PH-Meter.json /var/lib/grafana/dashboards/
 # Clean away unnessecary packages
 RUN apt-get remove -y python3-pip apt-transport-https ; apt-get -y autoremove
 
-EXPOSE 1883 3000
+EXPOSE 1883 8883 3000
+
+VOLUME /var/lib/influxdb
 
 ENTRYPOINT [ "/dock/setup.sh" ]

@@ -38,7 +38,14 @@ Mosquitto is currently set up with two users: 'phmeter' and 'user'. Both have st
 -e "MOSQ_PHMETER_PASS=<your-phmeter-password>"
 -e "MOSQ_USER_PASS=<your-user-password>"
 ```
-Mosquitto port within container: 1883
+Mosquitto ports within container: 1883 for regular traffic and 8883 for SSL
+
+## Persisting Data
+
+In order to persist data, a VOLUME is exposed in the image.
+```
+-v phdata:/var/lib/influxdb
+```
 
 ## Interaction
 
@@ -49,7 +56,8 @@ In case you want to use SSL/TLS, your best bet is to create a reverse proxy in f
 ## Examples
 
 ```
-docker run -d --name=phmeter -p 1883:1883 -p 3000:3000 \
+docker run -d --name=phmeter -p 1883:1883 -p 8883:8883 -p 3000:3000 \
+    -v phdata:/var/lib/influxdb \
     -e "GF_SECURITY_ADMIN_PASSWORD=<grafana-admin-password>" \
     -e "MOSQ_PHMETER_PASS=<your-phmeter-password>" \
     -e "MOSQ_USER_PASS=<your-user-password>" \
