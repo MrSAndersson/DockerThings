@@ -196,6 +196,7 @@
           },
           "yaxes": [
             {
+              "decimals": 1,
               "format": "celsius",
               "label": "",
               "logBase": 1,
