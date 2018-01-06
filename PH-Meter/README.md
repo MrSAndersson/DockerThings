@@ -1,5 +1,6 @@
 # PH-Meter
 Bundles Mosquitto, InfluxDB and Grafana to receive and display PH-Meter data.
+Available with docker image 'zappka/phmeter'
 
 ## Configuration
 
