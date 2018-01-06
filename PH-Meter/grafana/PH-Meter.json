@@ -98,8 +98,8 @@
               "format": "short",
               "label": "PH",
               "logBase": 1,
-              "max": null,
-              "min": null,
+              "max": 9,
+              "min": 7,
               "show": true
             },
             {
@@ -200,8 +200,8 @@
               "format": "celsius",
               "label": "",
               "logBase": 1,
-              "max": null,
-              "min": null,
+              "max": 28,
+              "min": 24,
               "show": true
             },
             {
