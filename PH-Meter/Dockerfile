@@ -1,5 +1,8 @@
 FROM grafana/grafana
 
+LABEL maintainer="stefan.nigma@gmail.com"
+LABEL version="2018.01.06"
+
 # Set timezone in container
 ENV TZ=Europe/Stockholm
 ENV GF_AUTH_ANONYMOUS_ENABLED=true
@@ -25,6 +28,9 @@ ADD mqtt_to_influx.py /dock/
 RUN chmod +x /dock/mqtt_to_influx.py
 
 ADD grafana/PH-Meter.json /var/lib/grafana/dashboards/
+
+# Clean away unnessecary packages
+RUN apt-get remove -y python3-pip apt-transport-https ; apt-get -y autoremove
 
 EXPOSE 1883 3000
 
