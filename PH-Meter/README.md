@@ -53,6 +53,6 @@ docker run -d --name=phmeter -p 1883:1883 -p 3000:3000 \
     -e "MOSQ_PHMETER_PASS=<your-phmeter-password>" \
     -e "MOSQ_USER_PASS=<your-user-password>" \
     -e "GF_AUTH_ANONYMOUS_ENABLED=true" \
-    mrsandersson/phmeter
+    zappka/phmeter
 ```
 This starts a container with the name "phmeter" with a Grafana accessible without login on http://localhost:3000 and accepts mqtt via port 1883.
