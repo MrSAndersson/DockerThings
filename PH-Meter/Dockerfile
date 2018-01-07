@@ -5,20 +5,20 @@ LABEL version="2018.01.06"
 
 # Set timezone in container
 ENV TZ=Europe/Stockholm
-ENV GF_AUTH_ANONYMOUS_ENABLED=true
 ENV GF_DASHBOARDS_JSON_ENABLED=true
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install applications
 RUN apt-get update
-RUN apt-get install -y apt-transport-https 
+RUN apt-get install --no-install-recommends -y apt-transport-https ; rm -rf /var/lib/apt/lists/*
 RUN curl -sL http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 RUN echo "deb http://repo.mosquitto.org/debian jessie main" | tee /etc/apt/sources.list.d/mosquitto.list
 RUN curl -sL https://repos.influxdata.com/influxdb.key | apt-key add - source /etc/os-release
 RUN echo "deb https://repos.influxdata.com/debian jessie stable" | tee /etc/apt/sources.list.d/influxdb.list
 RUN apt-get update
-RUN apt-get install -y influxdb mosquitto python3 python3-pip
-RUN pip3 install influxdb paho-mqtt
+
+# Install packages, uninstall unneeded packages and clean up in order to reduce size
+RUN apt-get install --no-install-recommends -y influxdb mosquitto python3 python3-pip ; pip3 install influxdb paho-mqtt ;  apt-get remove -y python3-pip apt-transport-https ; apt-get -y autoremove ; rm -rf /var/lib/apt/lists/*
 
 # Copy required files into container
 ADD setup.sh /dock/
@@ -30,9 +30,6 @@ ADD mqtt_to_influx.py /dock/
 RUN chmod +x /dock/mqtt_to_influx.py
 
 ADD grafana/PH-Meter.json /var/lib/grafana/dashboards/
-
-# Clean away unnessecary packages
-RUN apt-get remove -y python3-pip apt-transport-https ; apt-get -y autoremove
 
 EXPOSE 1883 3000
 
