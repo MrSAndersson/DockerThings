@@ -13,17 +13,23 @@ Grafana can be configured and customized the same ways that the official  'grafa
 Examples of possible customizations:
 
 * Setting of 'admin' user password (needed to customize dashboards as the default password is randomized)
-```
+
+```bash
 -e "GF_SECURITY_ADMIN_PASSWORD=<grafana-admin-password>"
 ```
+
 * Allowing anonymous users
-```
+
+```bash
 -e "GF_AUTH_ANONYMOUS_ENABLED=true"
 ```
+
 * Server URL
-```
+
+```bash
 -e "GF_SERVER_ROOT_URL=http://<your-server-root>"
 ```
+
 * Installation of plugins
 
 Here is the official Grafana Docker documentation: https://hub.docker.com/r/grafana/grafana/
@@ -34,7 +40,7 @@ Grafana port within container: 3000
 
 Mosquitto is currently set up with two users: 'phmeter' and 'user'. Both have strong randomized passwords by default so you need to set a password for each user you want to use by adding corresponding environment variables:
 
-```
+```bash
 -e "MOSQ_PHMETER_PASS=<your-phmeter-password>"
 -e "MOSQ_USER_PASS=<your-user-password>"
 ```
@@ -42,12 +48,18 @@ Mosquitto port within container: 1883
 
 ## Persisting Data
 
-In order to persist data, a VOLUME is exposed in the image.
-```
+In order to persist data, the following volumes are available:
+
+* /var/lib/influxdb  -  Sensor data
+* /var/lib/grafana   -  Grafana data
+* /var/log/grafana   -  Grafana logs
+
+```bash
 -v phdata:/var/lib/influxdb
+-v gfdata:/var/lib/grafana
+-v gflogs:/var/log/grafana
 ```
 
-## Interaction
 
 ## SSL
 
@@ -55,13 +67,15 @@ In case you want to use SSL/TLS, your best bet is to create a reverse proxy in f
 
 ## Examples
 
-```
+```bash
 docker run -d --name=phmeter -p 1883:1883 -p 3000:3000 \
     -v phdata:/var/lib/influxdb \
+    -v gfdata:/var/lib/grafana \
     -e "GF_SECURITY_ADMIN_PASSWORD=<grafana-admin-password>" \
     -e "MOSQ_PHMETER_PASS=<your-phmeter-password>" \
     -e "MOSQ_USER_PASS=<your-user-password>" \
     -e "GF_AUTH_ANONYMOUS_ENABLED=true" \
     zappka/phmeter
 ```
+
 This starts a container with the name "phmeter" with a Grafana accessible without login on http://localhost:3000 and accepts mqtt via port 1883.
