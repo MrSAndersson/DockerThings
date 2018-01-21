@@ -31,7 +31,7 @@ influxd &
 # Set up InfluxDB
 until influx -execute 'show databases'; do sleep .5; done
 influx -execute 'CREATE DATABASE phmeter'
-influx -execute "CREATE RETENTION POLICY five_min ON phmeter DURATION 1h REPLICATION 1 DEFAULT"
+influx -execute "CREATE RETENTION POLICY one_hour ON phmeter DURATION 1h REPLICATION 1 DEFAULT"
 influx -execute "CREATE RETENTION POLICY two_year ON phmeter DURATION 104w REPLICATION 1"
 
 ## Create Average Data
