@@ -32,11 +32,12 @@ influxd &
 until influx -execute 'show databases'; do sleep .5; done
 influx -execute 'CREATE DATABASE phmeter'
 influx -execute "CREATE RETENTION POLICY five_min ON phmeter DURATION 1h REPLICATION 1 DEFAULT"
+influx -execute "CREATE RETENTION POLICY two_year ON phmeter DURATION 104w REPLICATION 1"
 
 ## Create Average Data
-influx -execute 'CREATE CONTINUOUS QUERY "cq_5_ph" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "autogen"."ph" FROM "PH-Meter/status/ph" GROUP BY time(5m) END'
+influx -execute 'CREATE CONTINUOUS QUERY "cq_5_ph" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "two_year"."ph" FROM "PH-Meter/status/ph" GROUP BY time(5m) END'
 
-influx -execute 'CREATE CONTINUOUS QUERY "cq_5_temp" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "autogen"."temp" FROM "PH-Meter/status/temp" GROUP BY time(5m) END'
+influx -execute 'CREATE CONTINUOUS QUERY "cq_5_temp" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "two_year"."temp" FROM "PH-Meter/status/temp" GROUP BY time(5m) END'
 
 # Subscribe InfluxDB to MQTT 
 /dock/mqtt_to_influx.py &
