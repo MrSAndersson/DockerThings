@@ -36,9 +36,9 @@ influx -execute "CREATE RETENTION POLICY two_year ON phmeter DURATION 104w REPLI
 
 
 ## Create Average Data
-influx -execute 'CREATE CONTINUOUS QUERY "cq_1_ph" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "two_year"."ph" FROM "PH-Meter/status/ph" GROUP BY time(1m) END'
+influx -execute 'CREATE CONTINUOUS QUERY "cq_1_ph" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "two_year"."ph" FROM "PH-Meter/status/ph" GROUP BY time(2m) END'
 
-influx -execute 'CREATE CONTINUOUS QUERY "cq_1_temp" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "two_year"."temp" FROM "PH-Meter/status/temp" GROUP BY time(1m) END'
+influx -execute 'CREATE CONTINUOUS QUERY "cq_1_temp" ON "phmeter" BEGIN SELECT mean("value") AS "value" INTO "two_year"."temp" FROM "PH-Meter/status/temp" GROUP BY time(2m) END'
 
 # Subscribe InfluxDB to MQTT 
 /dock/mqtt_to_influx.py &
