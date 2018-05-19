@@ -60,6 +60,8 @@ In order to persist data, the following volumes are available:
 -v gflogs:/var/log/grafana
 ```
 
+ **Note:** Applications in the containers now run as the 'grafana' user instead of 'root' so if you have volumes created when applications ran as root, you need to either delete them and let them be recreated or change ownership of the volumes to 'grafana:grafana'
+
 
 ## SSL
 
