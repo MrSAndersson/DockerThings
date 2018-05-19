@@ -15,14 +15,12 @@ if [[ ! -v GF_SECURITY_ADMIN_PASSWORD ]]; then
 fi
 
 # Set up Mosquitto
-mv /dock/mosquitto/01-mosquitto-local.conf /etc/mosquitto/conf.d/
-mv /dock/mosquitto/mosquitto.acl /etc/mosquitto/
 
 echo "phmeter:${MOSQ_PHMETER_PASS}" > /etc/mosquitto/pwfile
 echo "user:${MOSQ_USER_PASS}" >> /etc/mosquitto/pwfile
 mosquitto_passwd -U /etc/mosquitto/pwfile
 
-service mosquitto restart
+/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf &
 
 # Start applications
 influxd &

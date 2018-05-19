@@ -3,36 +3,44 @@ FROM grafana/grafana
 LABEL maintainer="stefan.nigma@gmail.com"
 LABEL version="2018.01.06"
 
+
+# Switch to root user in order to install things
+USER root
+
 # Set timezone in container
 ENV TZ=Europe/Stockholm
 ENV GF_DASHBOARDS_JSON_ENABLED=true
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install applications
-RUN apt-get update
-RUN apt-get install --no-install-recommends -y apt-transport-https ; rm -rf /var/lib/apt/lists/*
+RUN apt-get update ; apt-get install --no-install-recommends -y apt-transport-https gnupg ; rm -rf /var/lib/apt/lists/*
 RUN curl -sL http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
-RUN echo "deb http://repo.mosquitto.org/debian jessie main" | tee /etc/apt/sources.list.d/mosquitto.list
-RUN curl -sL https://repos.influxdata.com/influxdb.key | apt-key add - source /etc/os-release
-RUN echo "deb https://repos.influxdata.com/debian jessie stable" | tee /etc/apt/sources.list.d/influxdb.list
-RUN apt-get update
+RUN echo "deb http://repo.mosquitto.org/debian stretch main" | tee /etc/apt/sources.list.d/mosquitto.list
+RUN curl -sL https://repos.influxdata.com/influxdb.key | apt-key add - ; /bin/bash -c "source /etc/os-release"
+RUN echo "deb https://repos.influxdata.com/debian stretch stable" | tee /etc/apt/sources.list.d/influxdb.list
 
 # Install packages, uninstall unneeded packages and clean up in order to reduce size
-RUN apt-get install --no-install-recommends -y influxdb mosquitto python3 python3-pip ; pip3 install influxdb paho-mqtt ;  apt-get remove -y python3-pip apt-transport-https ; apt-get -y autoremove ; rm -rf /var/lib/apt/lists/*
+RUN apt-get update ; apt-get install --no-install-recommends -y influxdb mosquitto python3 python3-pip python3-setuptools; pip3 install wheel ; pip3 install influxdb paho-mqtt ;  apt-get remove -y python3-pip apt-transport-https gnupg ; apt-get -y autoremove ; rm -rf /var/lib/apt/lists/*
 
 # Copy required files into container
-ADD setup.sh /dock/
+COPY setup.sh /dock/
 
 RUN chmod +x /dock/setup.sh
-ADD mosquitto/* /dock/mosquitto/
+COPY mosquitto/01-mosquitto-local.conf /etc/mosquitto/conf.d/
+COPY mosquitto/mosquitto.acl /etc/mosquitto/
+RUN chown -R grafana:grafana /etc/mosquitto /var/log/mosquitto  /var/lib/influxdb
 
-ADD mqtt_to_influx.py /dock/
+
+COPY mqtt_to_influx.py /dock/
 RUN chmod +x /dock/mqtt_to_influx.py
 
-ADD grafana/PH-Meter.json /var/lib/grafana/dashboards/
+COPY grafana/PH-Meter.json /var/lib/grafana/dashboards/
 
 EXPOSE 1883 3000
 
 VOLUME /var/lib/influxdb
+
+# Switch back to grafana user
+USER grafana
 
 ENTRYPOINT [ "/dock/setup.sh" ]
