@@ -1,2 +1,0 @@
-# DockerThings
-DockerThings
