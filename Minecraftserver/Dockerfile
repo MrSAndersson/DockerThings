@@ -11,7 +11,7 @@ USER root
 ENV TZ=Europe/Stockholm
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update ; apt-get install --no-install-recommends -y wget ; rm -rf /var/lib/apt/lists/*
+RUN apt-get update ; apt-get install --no-install-recommends -y wget vim ; rm -rf /var/lib/apt/lists/*
 
 COPY start.sh /
 RUN chmod +x start.sh
