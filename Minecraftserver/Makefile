@@ -5,5 +5,6 @@ build:
 
 push:
 	docker push zappka/minecraft
+	docker push zappka/minecraft:1.12.2
 
 all: build push
