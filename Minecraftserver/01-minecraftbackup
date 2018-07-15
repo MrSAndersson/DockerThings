@@ -1,0 +1,6 @@
+#!/bin/bash
+logfile='/var/log/minecraftbackup'
+echo "$(date "+%m-%d %H:%M:%S") - Starting Backup" >> $logfile
+
+docker run --rm -v minecraft:/volume -v /Storage/dockervolumes:/backup alpine tar -cjf /backup/minecraft.tar.bz2 -C /volume ./ 2>> $logfile
+echo "$(date "+%m-%d %H:%M:%S") - Finished Backup" >> $logfile
