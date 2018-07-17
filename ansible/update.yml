@@ -1,0 +1,12 @@
+---
+
+## Run wich ansible-playbook -i hosts update.yml -K
+- hosts: all
+  become: true
+  tasks:
+    - name: Upgrade all installed packages for Debian and Ubuntu
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
