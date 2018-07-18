@@ -19,7 +19,7 @@ RUN chmod +x start.sh
 RUN useradd minecraft -m
 USER minecraft
 
-RUN cd /home/minecraft ; wget https://launcher.mojang.com/mc/game/1.12.2/server/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar
+RUN cd /home/minecraft ; wget https://launcher.mojang.com/mc/game/1.13/server/d0caafb8438ebd206f99930cfaecfa6c9a13dca0/server.jar
 
 RUN mkdir /home/minecraft/server 
 WORKDIR /home/minecraft/server
