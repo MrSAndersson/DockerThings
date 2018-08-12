@@ -1,0 +1,6 @@
+#!/bin/bash
+logfile='/var/log/ftbbackup'
+echo "$(date "+%m-%d %H:%M:%S") - Starting Backup" >> $logfile
+
+docker run --rm -v ftb:/volume -v /Storage/dockervolumes:/backup alpine tar -cjf /backup/minecraft-ftb.tar.bz2 -C /volume ./ 2>> $logfile
+echo "$(date "+%m-%d %H:%M:%S") - Finished Backup" >> $logfile
