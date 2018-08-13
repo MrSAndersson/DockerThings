@@ -19,7 +19,13 @@ RUN chmod +x start.sh
 RUN useradd minecraft -m
 USER minecraft
 
-RUN mkdir /home/minecraft/zip ; cd /home/minecraft/zip ; wget https://www.feed-the-beast.com/projects/ftb-infinity-evolved/files/2484486/download ; unzip download
+RUN mkdir /home/minecraft/zip ; \
+    cd /home/minecraft/zip ; \
+    wget https://www.feed-the-beast.com/projects/ftb-infinity-evolved/files/2484486/download ; \
+    unzip download ; \
+    rm download ; \
+    wget https://minecraft.curseforge.com/projects/revamp/files/latest ; \
+    mv latest mods/Revamp.jar
 # COPY --chown=minecraft:minecraft ServerStart.sh /home/minecraft/zip/
 RUN chmod +x /home/minecraft/zip/ServerStart.sh
 
