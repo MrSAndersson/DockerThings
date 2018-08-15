@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-import crypt, getpass,os,base64, sys;
+import crypt, getpass, sys;
 
 def print_hash(passwd):
-	print crypt.crypt(passwd, "$6$"+base64.b64encode(os.urandom(16))+"$")
+	print(crypt.crypt(passwd, crypt.mksalt(crypt.METHOD_SHA512)))
 
 
 if sys.stdin.isatty():
