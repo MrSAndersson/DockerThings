@@ -2,6 +2,7 @@
 
 VERSION="$(lsb_release -c -s)"
 RELEASE="$(lsb_release -r -s)"
+PACKAGES=""
 
 echo "$RELEASE: $VERSION"
 
@@ -17,43 +18,49 @@ fi
 sudo apt-get update
 sudo apt-get install apt-transport-https curl software-properties-common ca-certificates
 
-echo "Adding docker-ce repo"
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $VERSION stable"
+#echo "Adding docker-ce repo"
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $VERSION stable"
+#PACKAGES+="docker-ce docker-compose "
 
 echo "Adding VSCode repo"
 
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+PACKAGES+="code "
 
-echo "Adding GCloud repo"
-export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#echo "Adding GCloud repo"
+#export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+#echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+#curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#PACKAGES+="google-cloud-sdk "
 
 echo "Adding Kubectl repo"
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo touch /etc/apt/sources.list.d/kubernetes.list
 echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+PACKAGES+="kubectl "
 
-echo "Adding .net core SDK repo"
-wget -q https://packages.microsoft.com/config/ubuntu/$RELEASE/packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
+#echo "Adding .net core SDK repo"
+#wget -q https://packages.microsoft.com/config/ubuntu/$RELEASE/packages-microsoft-prod.deb
+#sudo dpkg -i packages-microsoft-prod.deb
+#rm packages-microsoft-prod.deb
+#PACKAGES+="dotnet-sdk-2.1 "
 
 echo "Adding Papirus Icon theme repo"
 sudo add-apt-repository ppa:papirus/papirus
+PACKAGES+="papirus-icon-theme "
 
 echo "Adding Flatpak package repo"
-
 sudo add-apt-repository ppa:alexlarsson/flatpak
+PACKAGES+="flatpak gnome-software-plugin-flatpak "
 
- echo "Adding Puppet repo"
-
-wget https://apt.puppetlabs.com/puppet5-release-$VERSION.deb
-sudo dpkg -i puppet5-release-$VERSION.deb
-rm puppet5-release-$VERSION.deb
+#echo "Adding Puppet repo"
+#wget https://apt.puppetlabs.com/puppet5-release-$VERSION.deb
+#sudo dpkg -i puppet5-release-$VERSION.deb
+#rm puppet5-release-$VERSION.deb
+#PACKAGES+="puppet-agent "
 
 echo "Update package cache"
 
@@ -61,7 +68,9 @@ sudo apt-get update
 
 echo  "Install packages"
 
-sudo apt-get install -y arc-theme code docker-ce docker-compose dotnet-sdk-2.1 flatpak gnome-software-plugin-flatpak gnome-tweaks git google-cloud-sdk gnome-session gnome-shell-pomodoro kubectl papirus-icon-theme puppet-agent vim
+PACKAGES+="arc-theme gnome-tweaks git gnome-session gnome-shell-pomodoro tilix vim "
+
+sudo apt-get install -y $PACKAGES
 
 
 echo "Installing Google Chrome"
