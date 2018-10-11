@@ -48,6 +48,12 @@ PACKAGES+="kubectl "
 #rm packages-microsoft-prod.deb
 #PACKAGES+="dotnet-sdk-2.1 "
 
+echo "Adding GCFSFuse repo"
+export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
+echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+PACKAGES1="gcsfuse "
+
 echo "Adding Papirus Icon theme repo"
 sudo add-apt-repository ppa:papirus/papirus
 PACKAGES+="papirus-icon-theme "
@@ -74,7 +80,12 @@ sudo apt-get install -y $PACKAGES
 
 
 echo "Installing Google Chrome"
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb ; sudo dpkg -i google-chrome-stable_current_amd64.deb ; rm google-chrome-stable_current_amd64.deb
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb 
+sudo dpkg -i google-chrome-stable_current_amd64.deb 
+rm google-chrome-stable_current_amd64.deb
+
+#echo "Installing Teamviewer"
+#wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
 
 
 
