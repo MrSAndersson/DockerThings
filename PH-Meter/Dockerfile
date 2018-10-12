@@ -1,7 +1,7 @@
 FROM grafana/grafana
 
 LABEL maintainer="stefan.nigma@gmail.com"
-LABEL version="2018.01.06"
+LABEL version="2018.10.12"
 
 
 # Switch to root user in order to install things
@@ -13,7 +13,7 @@ ENV GF_DASHBOARDS_JSON_ENABLED=true
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install applications
-RUN apt-get update ; apt-get install --no-install-recommends -y apt-transport-https gnupg ; rm -rf /var/lib/apt/lists/*
+RUN apt-get update ; apt-get install --no-install-recommends -y apt-transport-https curl gnupg ; rm -rf /var/lib/apt/lists/*
 RUN curl -sL http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | apt-key add -
 RUN echo "deb http://repo.mosquitto.org/debian stretch main" | tee /etc/apt/sources.list.d/mosquitto.list
 RUN curl -sL https://repos.influxdata.com/influxdb.key | apt-key add - ; /bin/bash -c "source /etc/os-release"
