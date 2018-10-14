@@ -27,7 +27,7 @@ if [[ $(confirm 'Install Docker? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding docker-ce repo"
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $VERSION stable"
+    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $VERSION stable"
     PACKAGES+="docker-ce docker-compose "
     echo ""
 fi
@@ -47,7 +47,7 @@ if [[ $(confirm 'Install GCloud SDK? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding GCloud repo"
     export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
+    sudo echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
     PACKAGES+="google-cloud-sdk "
     echo ""
@@ -58,7 +58,7 @@ then
     echo "Adding Kubectl repo"
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
     sudo touch /etc/apt/sources.list.d/kubernetes.list
-    echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+    sudo echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
     INSTALLKUBECTL=true
     PACKAGES+="kubectl "
     echo ""
@@ -78,7 +78,7 @@ if [[ $(confirm 'Install GCSFuse? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding GCSFuse repo"
     export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
-    echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
+    sudo echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" > /etc/apt/sources.list.d/gcsfuse.list
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
     PACKAGES1="gcsfuse "
     echo ""
@@ -87,7 +87,7 @@ fi
 if [[ $(confirm 'Install Papirus Icon theme? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding Papirus Icon theme repo"
-    sudo add-apt-repository ppa:papirus/papirus
+    sudo add-apt-repository -y ppa:papirus/papirus
     PACKAGES+="papirus-icon-theme "
     echo ""
 fi
@@ -95,7 +95,7 @@ fi
 if [[ $(confirm 'Install Flatpak? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding Flatpak package repo"
-    sudo add-apt-repository ppa:alexlarsson/flatpak
+    sudo add-apt-repository -y ppa:alexlarsson/flatpak
     INSTALLFLATPAK=true
     PACKAGES+="flatpak gnome-software-plugin-flatpak "
     echo ""
