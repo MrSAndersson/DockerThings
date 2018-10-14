@@ -47,7 +47,7 @@ if [[ $(confirm 'Install GCloud SDK? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding GCloud repo"
     export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-    sudo echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
+    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
     PACKAGES+="google-cloud-sdk "
     echo ""
@@ -57,8 +57,7 @@ if [[ $(confirm 'Install Kubectl? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding Kubectl repo"
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-    sudo touch /etc/apt/sources.list.d/kubernetes.list
-    sudo echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+    echo "deb http://apt.kubernetes.io/ kubernetes-$VERSION main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
     INSTALLKUBECTL=true
     PACKAGES+="kubectl "
     echo ""
@@ -78,7 +77,7 @@ if [[ $(confirm 'Install GCSFuse? [Y/n]: ') =~ ^(yes|y|'')$ ]]
 then
     echo "Adding GCSFuse repo"
     export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
-    sudo echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" > /etc/apt/sources.list.d/gcsfuse.list
+    echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
     PACKAGES1="gcsfuse "
     echo ""
