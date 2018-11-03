@@ -21,7 +21,6 @@ bucket=gs://standersson-se-backup
 
 # File containing previous backups
 fullfile='/usr/local/backupscript/lastfullbackup'
-diffile='/usr/local/backupscript/lastbackup'
 
 # Log File
 logfile='/var/log/bucketbackups'
@@ -41,7 +40,7 @@ function fullbackup {
 	tar czf $dest/$archive_file $excl $sourceloc
 
 	# Update the 'last full backup' file
-	echo $(date +%y-%m-%d-%H-%M) > $fullfile
+	echo $day > $fullfile
 }
 
 function diffbackup {
