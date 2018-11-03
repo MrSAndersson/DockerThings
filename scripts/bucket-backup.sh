@@ -103,6 +103,9 @@ fi
 
 if [ $transfer_status -eq 0 ]; then
 	echo "$(date +%y-%m-%d-%H-%M) - Transfer Completed - it took $tdurat to send $(((lsize)/1000000)) MB" | tee -a $logfile
+
+	# Remove local backup tar
+	rm $dest/$archive_file
 else
 	echo "$(date +%y-%m-%d-%H-%M) - Transfer Failed - Failed after $tdurat. File was $(((lsize)/1000000)) MB" | tee -a $logfile
 
