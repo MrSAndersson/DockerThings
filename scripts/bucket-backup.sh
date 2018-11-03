@@ -4,7 +4,7 @@
 # Backup source
 sourceloc='/Storage'
 
-sendgridapikey='<Grab-From-Lastpass>'
+sendgridapikey='<Grab from Lastpass>'
 sendgridurl='https://api.sendgrid.com/v3/mail/send'
 
 # Exclusions
@@ -12,6 +12,9 @@ excl='--exclude=/Storage/.Trash-1000 --exclude=/Storage/Storage/Media/Film --exc
 
 # Backup destination
 dest='/Storage/.backup'
+
+# Backup retention (in months)
+retention='2'
 
 # External Backup Location
 bucket=gs://standersson-se-backup
@@ -104,4 +107,18 @@ else
 	echo "$(date +%y-%m-%d-%H-%M) - Transfer Failed - Failed after $tdurat. File was $(((lsize)/1000000)) MB" | tee -a $logfile
 
 	curl --request POST --url $sendgridurl --header "Authorization: Bearer $sendgridapikey" --header 'Content-Type: application/json' --data '{"personalizations": [{"to": [{"email": "stefan.nigma@gmail.com"}]}],"from": {"email": "backup@standersson.se"},"subject": "Backup transmission failed","content": [{"type": "text/plain", "value": "Backup transfer to backup server failed!"}]}'
+fi
+
+# Remove old backups
+if [ $transfer_status -eq 0 ]; then
+	echo "$(date +%y-%m-%d-%H-%M) - Removing old backups" | tee -a $logfile
+	oldbackups=$(gsutil ls gs://standersson-se-backup/ | grep -vi diff | head -n -$retention | cut -d"/" -f4)
+
+	for item in $oldbackups
+	do
+		echo "$(date +%y-%m-%d-%H-%M) - Removing $item" | tee -a $logfile
+		gsutil rm gs://standersson-se-backup/$item
+	done
+else
+	echo "$(date +%y-%m-%d-%H-%M) - Backup failed, skipping old backup cleaning" | tee -a $logfile
 fi
