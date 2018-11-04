@@ -19,6 +19,9 @@ retention='2'
 # External Backup Location
 bucket=gs://standersson-se-backup
 
+# Email to send notivications to
+notifyemail='<email-address>'
+
 # File containing previous backups
 fullfile='/usr/local/backupscript/lastfullbackup'
 
@@ -108,7 +111,7 @@ if [ $transfer_status -eq 0 ]; then
 else
 	echo "$(date +%y-%m-%d-%H-%M) - Transfer Failed - Failed after $tdurat. File was $(((lsize)/1000000)) MB" | tee -a $logfile
 
-	curl --request POST --url $sendgridurl --header "Authorization: Bearer $sendgridapikey" --header 'Content-Type: application/json' --data '{"personalizations": [{"to": [{"email": "stefan.nigma@gmail.com"}]}],"from": {"email": "backup@standersson.se"},"subject": "Backup transmission failed","content": [{"type": "text/plain", "value": "Backup transfer to backup server failed!"}]}'
+	curl --request POST --url $sendgridurl --header "Authorization: Bearer $sendgridapikey" --header 'Content-Type: application/json' --data '{"personalizations": [{"to": [{"email": "'$notifyemail'"}]}],"from": {"email": "backup@standersson.se"},"subject": "Backup transmission failed","content": [{"type": "text/plain", "value": "Backup transfer to backup server failed!"}]}'
 fi
 
 # Remove old backups
