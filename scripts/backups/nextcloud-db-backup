@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --on
+
+mysqldump --single-transaction nextcloud > /Storage/nextcloud_db.bak
+
+sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off
