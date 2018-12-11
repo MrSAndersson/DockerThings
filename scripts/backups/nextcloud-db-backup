@@ -1,8 +1,28 @@
 #!/bin/bash
 
+logfile='/var/log/backups'
+
+echo "$(date +%y-%m-%d-%H-%M) - Back up Nextcloud DB" | tee -a $logfile
 sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --on
 
+if [ $? -ne 0 ]; then
+    echo "$(date +%y-%m-%d-%H-%M) - Failed to put Nextcloud in Maintenance Mode" | tee -a $logfile
+    exit 1
+fi
+
+
 mysqldump --single-transaction nextcloud > /Storage/nextcloud_db.bak
+
+if [ $? -ne 0 ]; then
+    echo "$(date +%y-%m-%d-%H-%M) - Failed to dump Nextcloud DB" | tee -a $logfile
+    exit 1
+fi
+
 chmod 600 /Storage/nextcloud_db.bak
 
 sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off
+
+if [ $? -ne 0 ]; then
+    echo "$(date +%y-%m-%d-%H-%M) - Failed to take Nextcloud out of Maintenance Mode" | tee -a $logfile
+    exit 1
+fi
