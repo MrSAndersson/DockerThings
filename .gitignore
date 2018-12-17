@@ -1,4 +1,4 @@
-.vscode
+#.vscode
 ansible/update.retry
 
 # Dotnet Core Build results
