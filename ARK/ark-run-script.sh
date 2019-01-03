@@ -11,3 +11,6 @@ docker run --restart always -d -v ark:/home/steam/ark \
     -e SERVER_PASS=<YOUR SERVER PASS> \
     -e ADMIN_PASS=<YOUR ADMIN PASS> \
     --name=ark zappka/ark:latest
+
+    ## Example OPTIONS
+    # -e ARK_OPTIONS='XPMultiplier=3?TamingSpeedMultiplier=2' \
