@@ -8,8 +8,25 @@ namespace _3._1
     {
         public int xOrigin { get; set; }
         public int yOrigin { get; set; }
-        public int xLength { get; set; }
-        public int yLength { get; set; }
+
+        //TODO Make sure xEnd and yEnd are Origin + Lenght
+        public int xEnd { get; set; }
+        public int yEnd { get; set; }
+
+        public void CheckOverlap(Claim otherClaim)
+        {
+            for (int x = xOrigin; x < xEnd; x++)
+            {
+                for (int y = yOrigin; y < yEnd; y++)
+                {
+                    if (otherClaim.xOrigin <= x && x <= otherClaim.xEnd &&
+                        otherClaim.yOrigin <= y && y <= otherClaim.yEnd)
+                    {
+                        //TODO have a list, check if the position is present and add if not
+                    }
+                }
+            }
+        }
     }
 
     class Program
@@ -23,8 +40,10 @@ namespace _3._1
                 string newClaim;
                 while ((newClaim = reader.ReadLine()) != null)
                 {
-
+                    //TODO Parse all lines and save as claims in a list
                 }
+
+                //TODO Go through each combination
             }
         }
     }
