@@ -26,12 +26,20 @@ namespace _3._1
 
     class Claim
     {
-        public int xOrigin { get; set; }
-        public int yOrigin { get; set; }
+
+        public int xOrigin { get; }
+        public int yOrigin { get; }
 
         //TODO Make sure xEnd and yEnd are Origin + Lenght
-        public int xEnd { get; set; }
-        public int yEnd { get; set; }
+        public int xEnd { get; }
+        public int yEnd { get; }
+        public Claim(int xOrigin, int xLength, int yOrigin, int yLength)
+        {
+            this.xOrigin = xOrigin;
+            this.yOrigin = yOrigin;
+            this.xEnd = xOrigin + xLength;
+            this.yEnd = yOrigin + yLength;
+        }
 
         public List<Coordinate> CheckOverlap(Claim otherClaim, List<Coordinate> overlaps)
         {
@@ -67,10 +75,24 @@ namespace _3._1
                 string newClaim;
                 while ((newClaim = reader.ReadLine()) != null)
                 {
-                    //TODO Parse all lines and save as claims in a list
-                }
+                    string[] newClaimSplit = newClaim.Split(' ', 4);
+                    string[] x = newClaimSplit[2].Split(',', 2);
+                    string y = x[1].Trim(':');
+                    int xOrigin = int.Parse(x[0]);
+                    int yOrigin = int.Parse(y);
+                    string[] lengthSplit = newClaimSplit[3].Split('x', 2);
+                    int xLength = int.Parse(lengthSplit[0]);
+                    int yLength = int.Parse(lengthSplit[1]);
 
-                //TODO Go through each combination
+                    claims.Add(new Claim(xOrigin, xLength, yOrigin, yLength));
+                }
+            }
+            for (int x = 0; x < claims.Count; x++)
+            {
+                for (int y = x + 1; y < claims.Count; y++)
+                {
+                    overlaps = claims[x].CheckOverlap(claims[y], overlaps);
+                }
             }
         }
     }
