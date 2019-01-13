@@ -30,34 +30,36 @@ namespace _3._1
         public int xOrigin { get; }
         public int yOrigin { get; }
 
-        //TODO Make sure xEnd and yEnd are Origin + Lenght
         public int xEnd { get; }
         public int yEnd { get; }
         public Claim(int xOrigin, int xLength, int yOrigin, int yLength)
         {
             this.xOrigin = xOrigin;
             this.yOrigin = yOrigin;
-            this.xEnd = xOrigin + xLength;
-            this.yEnd = yOrigin + yLength;
+            this.xEnd = xOrigin + xLength - 1;
+            this.yEnd = yOrigin + yLength - 1;
         }
 
-        public List<Coordinate> CheckOverlap(Claim otherClaim, List<Coordinate> overlaps)
+        public List<Coordinate> CheckOverlap(Claim otherClaim, List<Coordinate> overlaps, out bool doesOverlap)
         {
-            for (int x = xOrigin; x < xEnd; x++)
+            bool internalDoesOverlap = false;
+            for (int x = xOrigin; x <= xEnd; x++)
             {
-                for (int y = yOrigin; y < yEnd; y++)
+                for (int y = yOrigin; y <= yEnd; y++)
                 {
                     if (otherClaim.xOrigin <= x && x <= otherClaim.xEnd &&
                         otherClaim.yOrigin <= y && y <= otherClaim.yEnd)
                     {
-                        Coordinate overlap = new Coordinate(x, y);
-                        if (!overlaps.Contains(overlap))
+                        internalDoesOverlap = true;
+                        Coordinate coordinate = new Coordinate(x, y);
+                        if (!overlaps.Contains(coordinate))
                         {
-                            overlaps.Add(overlap);
+                            overlaps.Add(coordinate);
                         }
                     }
                 }
             }
+            doesOverlap = internalDoesOverlap;
             return overlaps;
         }
     }
@@ -68,6 +70,7 @@ namespace _3._1
         {
             List<Coordinate> overlaps = new List<Coordinate>();
             List<Claim> claims = new List<Claim>();
+            int overlapFree = 0;
 
             FileStream filestream = new FileStream("input.txt", FileMode.Open);
             using (StreamReader reader = new StreamReader(filestream))
@@ -87,13 +90,32 @@ namespace _3._1
                     claims.Add(new Claim(xOrigin, xLength, yOrigin, yLength));
                 }
             }
-            for (int x = 0; x < claims.Count; x++)
+
+            int claimsCount = claims.Count;
+            for (int x = 0; x < claimsCount; x++)
             {
-                for (int y = x + 1; y < claims.Count; y++)
+                bool doesOverlap = false;
+                Console.WriteLine(x);
+                for (int y = 0; y < claimsCount; y++)
                 {
-                    overlaps = claims[x].CheckOverlap(claims[y], overlaps);
+                    if (x != y)
+                    {
+                        bool internalDoesOverlap;
+                        overlaps = claims[x].CheckOverlap(claims[y], overlaps, out internalDoesOverlap);
+                        if (internalDoesOverlap)
+                        {
+                            doesOverlap = true;
+                        }
+                    }
+                }
+
+                if (!doesOverlap)
+                {
+                    overlapFree = x + 1;
                 }
             }
+            Console.WriteLine("Overlaps: " + overlaps.Count);
+            Console.WriteLine("Non-Overlapping Claim is: " + overlapFree);
         }
     }
 }
