@@ -8,7 +8,7 @@ sendgridapikey='<Grab from Lastpass>'
 sendgridurl='https://api.sendgrid.com/v3/mail/send'
 
 # Exclusions
-excl='--exclude=/Storage/.Trash-1000 --exclude=/Storage/Storage/Media/Film --exclude=/Storage/Storage/Media/Serier --exclude=/Storage/.backup --exclude=/Storage/Nextcloud_Data/*/uploads'
+excl='--exclude=/Storage/.Trash-1000 --exclude=/Storage/Storage/Media/Film --exclude=/Storage/Storage/Media/Serier --exclude=/Storage/.backup --exclude=/Storage/Nextcloud_Data/*/uploads --exclude=/Storage/Nextcloud_Data/*/files_trashbin'
 
 # Backup destination
 dest='/Storage/.backup'
