@@ -27,6 +27,8 @@ services:
     image: graphiteapp/graphite-statsd
     container_name: graphite
     restart: always
+    ports:
+      - 2003:2003
     networks:
       - grafana-net
 
