@@ -124,8 +124,9 @@ if [ $transfer_status -eq 0 ]; then
 
 	for item in $oldbackups
 	do
-		echo "$(date +%y-%m-%d-%H-%M) - Removing $item" | tee -a $logfile
+		echo "$(date +%y-%m-%d-%H-%M) - Removing $item and its diff backups" | tee -a $logfile
 		gsutil rm gs://standersson-se-backup/$item
+		gsutil rm gs://standersson-se-backup/*-diff-$item
 	done
 else
 	echo "$(date +%y-%m-%d-%H-%M) - Backup failed, skipping old backup cleaning" | tee -a $logfile
