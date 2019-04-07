@@ -10,18 +10,20 @@ BuildArch: noarch
 %description
 A small fix for the Surface Go wifi driver
 
-%pre
+%install
+
+mkdir -p %{buildroot}/usr/lib/firmware/ath10k/QCA6174
+install -p -m 644 %{SOURCE0} %{buildroot}/usr/lib/firmware/ath10k/QCA6174
+
+%post
 mv /usr/lib/firmware/ath10k/QCA6174/hw2.1/board.bin /usr/lib/firmware/ath10k/QCA6174/hw2.1/board.bin.old
 mv /usr/lib/firmware/ath10k/QCA6174/hw3.0/board.bin /usr/lib/firmware/ath10k/QCA6174/hw3.0/board.bin.old
 
 mv /usr/lib/firmware/ath10k/QCA6174/hw2.1/board-2.bin /usr/lib/firmware/ath10k/QCA6174/hw2.1/board-2.bin.old
 mv /usr/lib/firmware/ath10k/QCA6174/hw3.0/board-2.bin /usr/lib/firmware/ath10k/QCA6174/hw3.0/board-2.bin.old
 
-%install
-mkdir -p %{buildroot}/usr/lib/firmware/ath10k/QCA6174/hw2.1
-install -p -m 644 %{SOURCE0} %{buildroot}/usr/lib/firmware/ath10k/QCA6174/hw2.1
-mkdir -p %{buildroot}/usr/lib/firmware/ath10k/QCA6174/hw3.0
-install -p -m 644 %{SOURCE0} %{buildroot}/usr/lib/firmware/ath10k/QCA6174/hw3.0
+cp /usr/lib/firmware/ath10k/QCA6174/board.bin /usr/lib/firmware/ath10k/QCA6174/hw2.1/board.bin
+cp /usr/lib/firmware/ath10k/QCA6174/board.bin /usr/lib/firmware/ath10k/QCA6174/hw3.0/board.bin
 
 %preun
 if [ -f /usr/lib/firmware/ath10k/QCA6174/hw2.1/board-2.bin ]; then
@@ -30,8 +32,7 @@ if [ -f /usr/lib/firmware/ath10k/QCA6174/hw2.1/board-2.bin ]; then
 fi
 
 %files
-/usr/lib/firmware/ath10k/QCA6174/hw2.1/board.bin
-/usr/lib/firmware/ath10k/QCA6174/hw3.0/board.bin
+/usr/lib/firmware/ath10k/QCA6174/board.bin
 
 %postun
 mv /usr/lib/firmware/ath10k/QCA6174/hw2.1/board.bin.old /usr/lib/firmware/ath10k/QCA6174/hw2.1/board.bin
