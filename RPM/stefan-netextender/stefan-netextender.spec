@@ -9,13 +9,40 @@ Source0: NetExtender.x86_64.tgz
 Requires: net-tools NetworkManager-ppp
 
 %description
-A srepackage of Dell netExtender into an RPM for ease of automatic install
+A repackage of Dell netExtender into an RPM for ease of automatic install
 
 %prep
 tar xf NetExtender.x86_64.tgz --strip 1
 
 %install
-./install
+mkdir -p %{buildroot}/etc/ppp/peers
+mkdir -p %{buildroot}/usr/share/man/man1
+mkdir -p %{buildroot}/usr/share/netExtender/icons
+install -m 644 %{buildroot}sslvpn /etc/ppp/peers/sslvpn
+install -m 755 %{buildroot}netExtender /usr/sbin
+install -m 755 %{buildroot}netExtenderGui /usr/bin
+install -m 744 %{buildroot}nxMonitor /usr/sbin
+install -m 755 %{buildroot}uninstallNetExtender /usr/sbin
+
+rm -f %{buildroot}/etc/ppp/sslvpn.pid
+rm -f %{buildroot}/etc/ppp/sslvpn.pid2
+install -m 644 %{buildroot}netExtender.1 /usr/share/man/man1/netExtender.1
+install -m 755 %{buildroot}libNetExtender.so $USRLIB
+install -m 755 %{buildroot}libNetExtenderEpc.so $USRLIB
+install -m 644 %{buildroot}$CABUNDLE /usr/share/netExtender
+
+# Don't use USRLIB variable for jar; netExtenderGui is hard-coded to /usr/lib
+install -m 644 %{buildroot}NetExtender.jar /usr/lib
+install -m 644 %{buildroot}icons/* /usr/share/netExtender/icons
+install -m 664 %{buildroot}NetExtender.desktop /usr/share/netExtender
+
+/usr/sbin/netExtender -i
+chmod 755 %{buildroot}/etc/ppp/ip-up %{buildroot}/etc/ppp/ip-down
+chmod 755 %{buildroot}/etc/ppp/ipv6-up %{buildroot}/etc/ppp/ipv6-down
+
+mkdir -p %{buildroot}/usr/share/applications
+cp %{buildroot}/usr/share/netExtender/NetExtender.desktop %{buildroot}/usr/share/applications/sonicwall-netextender.desktop
+
 
 %pre
 rm -f /etc/ppp/sslvpn.pid
