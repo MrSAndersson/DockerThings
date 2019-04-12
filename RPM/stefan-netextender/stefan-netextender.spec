@@ -18,27 +18,27 @@ tar xf NetExtender.x86_64.tgz --strip 1
 mkdir -p %{buildroot}/etc/ppp/peers
 mkdir -p %{buildroot}/usr/share/man/man1
 mkdir -p %{buildroot}/usr/share/netExtender/icons
-install -m 644 %{buildroot}sslvpn /etc/ppp/peers/sslvpn
-install -m 755 %{buildroot}netExtender /usr/sbin
-install -m 755 %{buildroot}netExtenderGui /usr/bin
-install -m 744 %{buildroot}nxMonitor /usr/sbin
-install -m 755 %{buildroot}uninstallNetExtender /usr/sbin
+mkdir -p %{buildroot}/usr/lib
+mkdir -p %{buildroot}/usr/lib64
+mkdir -p %{buildroot}/usr/share/man/man1/
+mkdir -p %{buildroot}/usr/sbin
+mkdir -p %{buildroot}/usr/bin
 
-rm -f %{buildroot}/etc/ppp/sslvpn.pid
-rm -f %{buildroot}/etc/ppp/sslvpn.pid2
-install -m 644 %{buildroot}netExtender.1 /usr/share/man/man1/netExtender.1
-install -m 755 %{buildroot}libNetExtender.so $USRLIB
-install -m 755 %{buildroot}libNetExtenderEpc.so $USRLIB
-install -m 644 %{buildroot}$CABUNDLE /usr/share/netExtender
+install -m 644 sslvpn %{buildroot}/etc/ppp/peers/sslvpn
+install -m 755 netExtender %{buildroot}/usr/sbin/
+install -m 755 netExtenderGui %{buildroot}/usr/bin/
+install -m 744 nxMonitor %{buildroot}/usr/sbin/
+install -m 755 uninstallNetExtender %{buildroot}/usr/sbin/
+
+#install -m 644 netExtender.1 %{buildroot}/usr/share/man/man1/netExtender.1
+install -m 755 libNetExtender.so %{buildroot}/usr/lib64/
+install -m 755 libNetExtenderEpc.so %{buildroot}/usr/lib64/
+install -m 644 ca-bundle.crt %{buildroot}/usr/share/netExtender/
 
 # Don't use USRLIB variable for jar; netExtenderGui is hard-coded to /usr/lib
-install -m 644 %{buildroot}NetExtender.jar /usr/lib
-install -m 644 %{buildroot}icons/* /usr/share/netExtender/icons
-install -m 664 %{buildroot}NetExtender.desktop /usr/share/netExtender
-
-/usr/sbin/netExtender -i
-chmod 755 %{buildroot}/etc/ppp/ip-up %{buildroot}/etc/ppp/ip-down
-chmod 755 %{buildroot}/etc/ppp/ipv6-up %{buildroot}/etc/ppp/ipv6-down
+install -m 644 NetExtender.jar %{buildroot}/usr/lib/
+install -m 644 icons/* %{buildroot}/usr/share/netExtender/icons/
+install -m 664 NetExtender.desktop %{buildroot}/usr/share/netExtender/
 
 mkdir -p %{buildroot}/usr/share/applications
 cp %{buildroot}/usr/share/netExtender/NetExtender.desktop %{buildroot}/usr/share/applications/sonicwall-netextender.desktop
@@ -67,7 +67,7 @@ chmod -v a+x /etc/ppp/peers
 /usr/sbin/netExtender
 /usr/bin/netExtenderGui
 /usr/sbin/nxMonitor
-/usr/sbin/uinstallNetExtender
+/usr/sbin/uninstallNetExtender
 
 /usr/lib/NetExtender.jar
 /usr/lib64/libNetExtender.so
