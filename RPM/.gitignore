@@ -2,3 +2,4 @@ noarch/
 .build*.log
 *.rpm
 *.tgz
+*.tar.gz
