@@ -14,7 +14,7 @@ excl='--exclude=/Storage/.Trash-1000 --exclude=/Storage/Storage/Media/Film --exc
 dest='/Storage/.backup'
 
 # Backup retention (in months)
-retention='2'
+retention='3'
 
 # External Backup Location
 bucket=gs://standersson-se-backup
