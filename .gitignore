@@ -1,5 +1,6 @@
 #.vscode
 ansible/update.retry
+.vscode
 
 # Dotnet Core Build results
 [Dd]ebug/
