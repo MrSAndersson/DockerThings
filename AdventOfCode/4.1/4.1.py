@@ -3,6 +3,7 @@ class Guard:
         self.sleep_times = []
         self.total_sleep = 0
 
+
 def import_data():
     file = open("Input.txt")
 
@@ -11,7 +12,6 @@ def import_data():
         data.append(line.rstrip('\n'))
     data.sort()
     return data
-
 
 
 data = import_data()
