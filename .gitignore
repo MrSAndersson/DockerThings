@@ -2,6 +2,10 @@
 ansible/update.retry
 .vscode/
 
+# Python
+__pycache__/
+
+
 # Dotnet Core Build results
 [Dd]ebug/
 [Dd]ebugPublic/
