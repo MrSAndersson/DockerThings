@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+    web:
+        build: .
+        image: swarm-test
+        ports:
+            - 80:5000
+        networks:
+            - mynet
+
+networks:
+    mynet:
