@@ -53,3 +53,14 @@ def get_sleepiest_guard(guards):
         if sleepiest_guard.total_sleep < guards[guard].total_sleep:
             sleepiest_guard = guards[guard]
     return sleepiest_guard
+
+
+def get_sleepiest_guard_minute(guards):
+    sleepiest = {'guard': 0, 'minute': 0, 'count': 0}
+    for guard in guards:
+        minute = guards[guard].sleepiest_minute()
+        if sleepiest['count'] < minute['count']:
+            sleepiest = {'guard': int(guard),
+                         'minute': minute['minute'],
+                         'count': minute['count']}
+    return sleepiest
