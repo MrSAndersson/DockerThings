@@ -8,7 +8,6 @@ new_position = 0
 data = ""
 
 while True:
-    temp_data = data
     data, matches = new_data, 0
 
     if new_position != 0:
@@ -33,4 +32,4 @@ while True:
     if 0 < position:
         new_position = position - 1
 
-print('String is: {}'.format(new_data))
+print('String is: {} units long'.format(len(new_data)))
