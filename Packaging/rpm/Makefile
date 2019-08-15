@@ -1,3 +1,7 @@
+all: build run
+
 build:
 	docker build . -t rpm-builder
-all: build
+
+run:
+	docker run -it --rm -v build-output:/home/stefan/build-output rpm-builder
