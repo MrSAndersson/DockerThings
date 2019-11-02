@@ -3,3 +3,5 @@ noarch/
 *.rpm
 *.tgz
 *.tar.gz
+gpg-pub.key
+gpg-priv.key

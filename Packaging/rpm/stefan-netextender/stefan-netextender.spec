@@ -12,7 +12,7 @@ Requires: net-tools NetworkManager-ppp
 A repackage of Dell netExtender into an RPM for ease of automatic install
 
 %prep
-tar xf NetExtender.x86_64.tgz --strip 1
+tar xf NetExtender.x86_64.tgz
 
 %install
 mkdir -p %{buildroot}/etc/ppp/peers
@@ -24,21 +24,22 @@ mkdir -p %{buildroot}/usr/share/man/man1/
 mkdir -p %{buildroot}/usr/sbin
 mkdir -p %{buildroot}/usr/bin
 
-install -m 644 sslvpn %{buildroot}/etc/ppp/peers/sslvpn
-install -m 755 netExtender %{buildroot}/usr/sbin/
-install -m 755 netExtenderGui %{buildroot}/usr/bin/
-install -m 744 nxMonitor %{buildroot}/usr/sbin/
-install -m 755 uninstallNetExtender %{buildroot}/usr/sbin/
 
-#install -m 644 netExtender.1 %{buildroot}/usr/share/man/man1/netExtender.1
-install -m 755 libNetExtender.so %{buildroot}/usr/lib64/
-install -m 755 libNetExtenderEpc.so %{buildroot}/usr/lib64/
-install -m 644 ca-bundle.crt %{buildroot}/usr/share/netExtender/
+install -m 644 netExtenderClient/sslvpn %{buildroot}/etc/ppp/peers/sslvpn
+install -m 755 netExtenderClient/netExtender %{buildroot}/usr/sbin/
+install -m 755 netExtenderClient/netExtenderGui %{buildroot}/usr/bin/
+install -m 744 netExtenderClient/nxMonitor %{buildroot}/usr/sbin/
+install -m 755 netExtenderClient/uninstallNetExtender %{buildroot}/usr/sbin/
+
+#install -m 644 netExtenderClient/netExtender.1 %{buildroot}/usr/share/man/man1/netExtender.1
+install -m 755 netExtenderClient/libNetExtender.so %{buildroot}/usr/lib64/
+install -m 755 netExtenderClient/libNetExtenderEpc.so %{buildroot}/usr/lib64/
+install -m 644 netExtenderClient/ca-bundle.crt %{buildroot}/usr/share/netExtender/
 
 # Don't use USRLIB variable for jar; netExtenderGui is hard-coded to /usr/lib
-install -m 644 NetExtender.jar %{buildroot}/usr/lib/
-install -m 644 icons/* %{buildroot}/usr/share/netExtender/icons/
-install -m 664 NetExtender.desktop %{buildroot}/usr/share/netExtender/
+install -m 644 netExtenderClient/NetExtender.jar %{buildroot}/usr/lib/
+install -m 644 netExtenderClient/icons/* %{buildroot}/usr/share/netExtender/icons/
+install -m 664 netExtenderClient/NetExtender.desktop %{buildroot}/usr/share/netExtender/
 
 mkdir -p %{buildroot}/usr/share/applications
 cp %{buildroot}/usr/share/netExtender/NetExtender.desktop %{buildroot}/usr/share/applications/sonicwall-netextender.desktop
@@ -61,7 +62,7 @@ chmod -v a+x /etc/ppp/peers
 
 
 %files
-%doc netExtender.1
+%doc netExtenderClient/netExtender.1
 %config /etc/ppp/peers/sslvpn
 
 /usr/sbin/netExtender
