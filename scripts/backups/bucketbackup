@@ -1,5 +1,5 @@
 #!/bin/bash
-# A backup Script for /Storage 
+# A backup Script for /Storage
 
 # Backup source
 sourceloc='/Storage'
@@ -19,9 +19,6 @@ retention='2'
 # External Backup Location
 bucket=gs://standersson-se-backup
 
-# Email to send notivications to
-notifyemail='<email-address>'
-
 # File containing previous backups
 fullfile='/usr/local/backupscript/lastfullbackup'
 
@@ -31,23 +28,22 @@ logfile='/var/log/backups'
 # Today's Date
 day=$(date +%y-%m-%d-%H-%M)
 
-
 # Record Start time
 starttime=$(date +%s)
 
-function fullbackup {
-	# Log start status message 
+function fullbackup() {
+	# Log start status message
 	echo "$(date +%y-%m-%d-%H-%M) - Full backup started" | tee -a $logfile
 
 	# Run Backup job
 	tar czf $dest/$archive_file $excl $sourceloc
 
 	# Update the 'last full backup' file
-	echo $day > $fullfile
+	echo $day >$fullfile
 }
 
-function diffbackup {
-	# Log start status message 
+function diffbackup() {
+	# Log start status message
 	echo "$(date +%y-%m-%d-%H-%M) - Backup Started at: $(date +%R)" | tee -a $logfile
 
 	# Run Backup job
@@ -65,11 +61,10 @@ else
 	diffbackup
 fi
 
-
 #Log exit status
-exittime=$((($(date +%s)-$starttime)/60))
-hours=$(($exittime/60))
-mins=$(($exittime-($hours*60)))
+exittime=$((($(date +%s) - $starttime) / 60))
+hours=$(($exittime / 60))
+mins=$(($exittime - ($hours * 60)))
 if [ "$hours" = "0" ]; then
 	durat="$mins m"
 else
@@ -77,11 +72,10 @@ else
 fi
 echo "$(date +%y-%m-%d-%H-%M) - Packaging Completed - it took $durat" | tee -a $logfile
 
-
 # Copy backup to the external backup server
 
 # Size of the file to be sent
-lsize=$(ls -l $dest/$archive_file |cut -d" " -f5)
+lsize=$(ls -l $dest/$archive_file | cut -d" " -f5)
 
 # Record Start time
 transstart=$(date +%s)
@@ -94,9 +88,9 @@ gsutil cp $dest/$archive_file gs://standersson-se-backup/
 transfer_status=$?
 
 #Log transfer time
-transdone=$((($(date +%s)-$transstart)/60))
-thours=$(($transdone/60))
-tmins=$(($transdone-($thours*60)))
+transdone=$((($(date +%s) - $transstart) / 60))
+thours=$(($transdone / 60))
+tmins=$(($transdone - ($thours * 60)))
 if [ "$thours" = "0" ]; then
 	tdurat="$tmins m"
 else
@@ -104,14 +98,14 @@ else
 fi
 
 if [ $transfer_status -eq 0 ]; then
-	echo "$(date +%y-%m-%d-%H-%M) - Transfer Completed - it took $tdurat to send $(((lsize)/1000000)) MB" | tee -a $logfile
+	echo "$(date +%y-%m-%d-%H-%M) - Transfer Completed - it took $tdurat to send $(((lsize) / 1000000)) MB" | tee -a $logfile
 
 	# Remove local backup tar
 	rm $dest/$archive_file
 else
-	echo "$(date +%y-%m-%d-%H-%M) - Transfer Failed - Failed after $tdurat. File was $(((lsize)/1000000)) MB" | tee -a $logfile
+	echo "$(date +%y-%m-%d-%H-%M) - Transfer Failed - Failed after $tdurat. File was $(((lsize) / 1000000)) MB" | tee -a $logfile
 
-	curl --request POST --url $sendgridurl --header "Authorization: Bearer $sendgridapikey" --header 'Content-Type: application/json' --data '{"personalizations": [{"to": [{"email": "'$notifyemail'"}]}],"from": {"email": "backup@standersson.se"},"subject": "Backup transmission failed","content": [{"type": "text/plain", "value": "Backup transfer to backup server failed!"}]}'
+	curl --request POST --url $sendgridurl --header "Authorization: Bearer $sendgridapikey" --header 'Content-Type: application/json' --data '{"personalizations": [{"to": [{"email": "stefan.nigma@gmail.com"}]}],"from": {"email": "backup@svard.me"},"subject": "Backup transmission failed","content": [{"type": "text/plain", "value": "Backup transfer to backup server failed!"}]}'
 fi
 
 # Remove old backups
@@ -122,8 +116,7 @@ if [ $transfer_status -eq 0 ]; then
 		echo "$(date +%y-%m-%d-%H-%M) - Removing old backups" | tee -a $logfile
 	fi
 
-	for item in $oldbackups
-	do
+	for item in $oldbackups; do
 		echo "$(date +%y-%m-%d-%H-%M) - Removing $item and its diff backups" | tee -a $logfile
 		gsutil rm gs://standersson-se-backup/$item
 		gsutil rm gs://standersson-se-backup/*-diff-$item
