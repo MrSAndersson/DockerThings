@@ -1,5 +1,5 @@
 ---
-## Run wich ansible-playbook -i test-hosts svard.me.yml
+## Run with ansible-playbook -i test-hosts svard.me.yml
 - hosts: all
   become: true
   tasks:

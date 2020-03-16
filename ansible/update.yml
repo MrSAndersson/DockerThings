@@ -1,6 +1,6 @@
 ---
 
-## Run wich ansible-playbook -i hosts update.yml -K
+## Run with ansible-playbook -i hosts update.yml -K
 - hosts: all
   become: true
   tasks:
