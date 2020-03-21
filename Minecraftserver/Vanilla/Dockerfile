@@ -1,7 +1,7 @@
-FROM openjdk:10-jre-slim
+FROM openjdk:jre-slim
 
-LABEL maintainer="stefan.nigma@gmail.com"
-LABEL version="2018.07.13"
+LABEL maintainer="stefan.svard@gmail.com"
+LABEL version="1.15.2"
 
 
 # Switch to root user in order to install things
@@ -19,7 +19,7 @@ RUN chmod +x start.sh
 RUN useradd minecraft -m
 USER minecraft
 
-RUN cd /home/minecraft ; wget https://launcher.mojang.com/v1/objects/3737db93722a9e39eeada7c27e7aca28b144ffa7/server.jar
+RUN cd /home/minecraft ; wget https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar
 
 RUN mkdir /home/minecraft/server 
 WORKDIR /home/minecraft/server
