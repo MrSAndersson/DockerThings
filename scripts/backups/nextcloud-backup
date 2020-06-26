@@ -1,6 +1,10 @@
 #!/bin/bash
 
 logfile='/var/log/backups'
+dbbakfilepath='/Storage/nextcloud-backup/nextcloud_db.bak'
+
+configpath='/var/www/nextcloud/config/config.php'
+configbakpath='/Storage/nextcloud-backup/config.php'
 
 echo "$(date +%y-%m-%d-%H-%M) - Back up Nextcloud DB" | tee -a $logfile
 sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --on
@@ -10,15 +14,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+install -C -m 700 -o root -g root $configpath $configbakpath
 
-mysqldump --single-transaction nextcloud > /Storage/nextcloud_db.bak
+mysqldump --single-transaction nextcloud > $dbbakfilepath
 
 if [ $? -ne 0 ]; then
     echo "$(date +%y-%m-%d-%H-%M) - Failed to dump Nextcloud DB" | tee -a $logfile
     exit 1
 fi
 
-chmod 600 /Storage/nextcloud_db.bak
+chmod 600 $dbbakfilepath
 
 sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off
 
