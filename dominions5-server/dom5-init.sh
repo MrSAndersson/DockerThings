@@ -10,3 +10,6 @@ unzip FloatingArchipelago.zip
 cd ~/.dominions5/mods
 cp ~/AI_No_RecruitV.6.zip .
 unzip AI_No_RecruitV.6.zip
+
+read -p "Enter CDKey: " CDKEY
+echo $CDKEY > /home/steam/dom5/dom5key
