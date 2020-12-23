@@ -18,5 +18,5 @@ EXPOSE 7777/tcp
 
 ENTRYPOINT [ "/home/steam/dom5/dom5.sh", "-TS", "--era", "1", "--renaming", "--masterpass", "grob", \
     "--diffai", "14", "--normai", "8", "--diffai", "11", "--diffai", "38", \
-    "--thrones", "0", "8", "0", \
+    "--thrones", "0", "8", "0", "--requiredap", "8", \
     "--port", "7777", "--hours", "62", "--nosteam", "--mapfile", "FloatingArchipelago.map", "Grobminions5" ]
