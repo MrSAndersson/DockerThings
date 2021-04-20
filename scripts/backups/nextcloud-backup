@@ -3,11 +3,11 @@
 logfile='/var/log/backups'
 dbbakfilepath='/Storage/nextcloud-backup/nextcloud_db.bak'
 
-configpath='/var/www/nextcloud/config/config.php'
+configpath='/opt/nextcloud/nextcloud_data/config/config.php'
 configbakpath='/Storage/nextcloud-backup/config.php'
 
 echo "$(date +%y-%m-%d-%H-%M) - Back up Nextcloud DB" | tee -a $logfile
-sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --on
+docker exec -u www-data nextcloud sh -c "php occ maintenance:mode --on"
 
 if [ $? -ne 0 ]; then
     echo "$(date +%y-%m-%d-%H-%M) - Failed to put Nextcloud in Maintenance Mode" | tee -a $logfile
@@ -16,7 +16,7 @@ fi
 
 install -C -m 700 -o root -g root $configpath $configbakpath
 
-mysqldump --single-transaction nextcloud > $dbbakfilepath
+docker exec nextcloud_db_1 sh -c 'exec mysqldump --single-transaction nextcloud -p${MYSQL_ROOT_PASSWORD}' > $dbbakfilepath
 
 if [ $? -ne 0 ]; then
     echo "$(date +%y-%m-%d-%H-%M) - Failed to dump Nextcloud DB" | tee -a $logfile
@@ -25,7 +25,7 @@ fi
 
 chmod 600 $dbbakfilepath
 
-sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off
+docker exec -u www-data nextcloud sh -c "php occ maintenance:mode --off"
 
 if [ $? -ne 0 ]; then
     echo "$(date +%y-%m-%d-%H-%M) - Failed to take Nextcloud out of Maintenance Mode" | tee -a $logfile
