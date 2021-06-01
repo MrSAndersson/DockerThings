@@ -34,12 +34,12 @@ starttime=$(date +%s)
 function fullbackup() {
 	# Log start status message
 	echo "$(date +%y-%m-%d-%H-%M) - Full backup started" | tee -a $logfile
+	
+	# Update the 'last full backup' file
+	echo $day >$fullfile
 
 	# Run Backup job
 	tar czf $dest/$archive_file $excl $sourceloc
-
-	# Update the 'last full backup' file
-	echo $day >$fullfile
 }
 
 function diffbackup() {
