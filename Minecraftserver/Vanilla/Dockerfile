@@ -1,4 +1,4 @@
-FROM openjdk:jre-slim
+FROM openjdk:slim
 
 LABEL maintainer="stefan@svard.me"
 LABEL version="1.17"

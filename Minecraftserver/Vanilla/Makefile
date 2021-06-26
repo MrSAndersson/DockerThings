@@ -1,5 +1,5 @@
 build:
-	docker pull openjdk:jre-slim
+	docker pull openjdk:slim
 	docker build . --tag zappka/minecraft:latest
 	docker tag zappka/minecraft zappka/minecraft:1.17
 
